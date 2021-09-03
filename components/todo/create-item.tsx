@@ -25,7 +25,7 @@ const CreateItem: React.FC<IProps> = ({ onCreated }) => {
     if (text.trim().length < 1) return;
     try {
       const res = await axiosSession.post(todoEndpoint, { title: text });
-      if (res.status === 201) {
+      if (res.status === 200) {
         await onCreated();
         setText("");
         toast.success("Todo item created!");

@@ -6,11 +6,11 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import axiosSession from "../../utils/axios-session";
 import { todoEndpoint } from "../../utils/endpoints";
 import Button from "@material-ui/core/Button";
+import toast from "react-hot-toast";
 
 interface IProps {
   item: ITodoItem;
@@ -36,12 +36,21 @@ const EditItem: React.FC<IProps> = ({ item, onEdited }) => {
   const saveChanges = async () => {
     if (text.trim().length < 1) return;
 
-    const res = await axiosSession.put(`${todoEndpoint}/${item.id}`, {
-      title: text,
-    });
+    try {
+      const res = await axiosSession.put(`${todoEndpoint}/${item.id}`, {
+        title: text,
+      });
 
-    handleClose();
-    await onEdited();
+      if (res.status === 200) {
+        handleClose();
+        await onEdited();
+        return;
+      }
+      toast.error(`An error occured! [${res.status}]`);
+    } catch (error) {
+      toast.error("An error occured");
+      console.log(error);
+    }
   };
 
   return (
