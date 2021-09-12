@@ -1,4 +1,8 @@
+import getConfig from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+
 export const endpoint =
-  process.env.NEXT_PUBLIC_ENDPOINT || "http://localhost:3001";
+  publicRuntimeConfig?.endpoint ?? "http://localhost:8080";
 
 export const todoEndpoint = `${endpoint}/todo`;
